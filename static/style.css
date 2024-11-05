@@ -162,3 +162,15 @@ input[type="radio"]{
     background-color: var(--ac) !important;
     font-weight: 600;
 }
+
+@media (width < 1300px){
+    .form{
+        width: 75%;
+    }
+}
+
+@media (width < 1000px){
+    .results{
+        width: 100%;
+    }
+}
