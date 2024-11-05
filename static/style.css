@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&display=swap');
+
+:root{
+    --bg: #443b47;
+    --fg: #FFDDE2;
+    --ac: #FF8CC6;
+}
+
+*{
+    font-family: 'Gabarito';
+    color: var(--fg);
+}
+
+::selection{
+    background: var(--ac);
+    color: var(--bg);
+}
+
+body, html{
+    width: 100vw;
+    box-sizing: border-box;
+    margin: 0;
+    background-color: var(--bg);
+}
+
+a{
+    text-decoration: none;
+}
+
+.frame{
+    width: 100vw;
+    height: auto;
+    box-sizing: border-box;
+    position: relative;
+}
+
+h1.title{
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 3vh 0;
+    font-size: 4rem;
+}
+
+.form{
+    width: 30%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question{
+    font-size: 2.25rem;
+}
+
+button{
+    background: var(--ac);
+    color: var(--bg);
+    user-select: none;
+    padding: 1vh 2vh;
+    border-radius: .75rem;
+    border: none;
+    outline: none;
+    font-size: 1.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 250ms;
+}
+
+button:hover{
+    filter: brightness(1.1);
+}
+
+.btns{
+    position: absolute;
+    inset: auto auto 0% 50%;
+    transform: translate(-50%, 100%);
+    display: flex;
+    gap: 1vh;
+}
+
+.options{
+    width: 100%;
+    display: grid;
+    box-sizing: border-box;
+    gap: .75vh;
+    grid-template-columns: auto auto;
+    margin: 2vh 0;
+}
+
+.options .option{
+    background: var(--bg);
+    box-sizing: border-box;
+    padding: 1vh;
+    border: 2px solid var(--fg);
+    border-radius: .75rem;
+    cursor: pointer;
+    transition: 200ms;
+    font-size: 1.1rem;
+    user-select: none;
+}
+
+.options .option:hover{
+    filter: brightness(1.1);
+}
+
+.profile{
+    position: absolute;
+    inset: 1vw 1vw auto auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1;
+    width: 2vw;
+    cursor: pointer;
+}
+
+.profile .icon span{
+    font-size: 2vw;
+}
+
+input[type="radio"]{
+    display: none;
+}
+
+.results{
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    margin-top: 2vh;
+    width: 75%;
+}
+
+.results .line{
+    border: 2px solid var(--ac);
+    border-radius: 1rem;
+    padding: 2vh;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.results .line *{
+    font-weight: 600;
+    font-size: 1.75rem;
+}

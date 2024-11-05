@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TischTalk</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+</head>
+<body>
+    <div class="frame">
+        <a href="/"><h1 class="title">TischTalk</h1></a>
+
+        <div class="form">
+            {% block form %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="profile">
+        <div class="icon">
+            <span class="material-symbols-outlined">account_circle</span>
+        </div>
+    </div>
+</body>
+</html>

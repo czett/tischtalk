@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block form %}
+
+<form action="/vote" method="post" enctype="multipart/form-data">
+    <h2 class="question">Wer würde am ehesten den orble flimben?</h2>
+
+    <div class="options">
+        {% for person in persons %}
+            <input class="radio" type="radio" name="person" id="{{person}}" value="{{person}}">
+            <label for="{{person}}" class="option">{{person}}</label>
+        {% endfor %}
+    </div>
+
+    <div class="btns">
+        <button type="submit">voten</button>
+        <a href="/results"><button type="button">ergebnisse</button></a>
+    </div>
+</form>
+
+{% endblock %}

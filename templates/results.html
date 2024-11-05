@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block form %}
+
+<h2 class="question">Wer würde am ehesten den orble flimben?</h2>
+
+<div class="results">
+    {% for vote in votes %}
+    <div class="line {{vote.option}}">
+        <div class="name">{{ vote.option }}</div>
+        <div class="votes">{{ vote.count }}</div>
+    </div>
+
+    <style>
+        .line.{{vote.option}}{
+            background: linear-gradient(to right, #FF8CC6 0% {{ (vote.count / total_votes * 100) | round(1) }}%, transparent {{ (vote.count / total_votes * 100) | round(1) }}% 100%);
+        }
+    </style>
+    {% endfor %}
+</div>
+
+{% endblock %}
