@@ -49,7 +49,10 @@ def start():
     
 @app.route("/session_config")
 def config():
+    # more to come, just creating foundations
     session["logged_in"] = False
+    session["name"] = ""
+    session["profile_id"] = ""
     session["voted"] = False
 
     return redirect("/")
