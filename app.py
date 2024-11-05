@@ -4,7 +4,7 @@ from datetime import datetime
 import random
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///votes.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 db = SQLAlchemy(app)
 app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
 
