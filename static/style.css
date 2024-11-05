@@ -148,3 +148,15 @@ input[type="radio"]{
     font-weight: 600;
     font-size: 1.75rem;
 }
+
+.voted-msg{
+    text-align: center;
+    padding-bottom: 1vh;
+}
+
+.clicked{
+    border: 2px solid var(--ac) !important;
+    color: var(--bg);
+    background-color: var(--ac) !important;
+    font-weight: 600;
+}

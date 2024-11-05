@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
 </head>
 <body>
+    <script>
+        function clickName(element){
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('clicked');
+            });
+            element.classList.add("clicked");
+        }
+    </script>
+
     <div class="frame">
         <a href="/"><h1 class="title">TischTalk</h1></a>
 

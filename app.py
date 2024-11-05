@@ -1,9 +1,10 @@
-from flask import Flask, render_template, redirect, request, jsonify
+from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///votes.db'
 db = SQLAlchemy(app)
+app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
 
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,7 +19,22 @@ persons = ['Adrian', 'Anna', 'Annika', 'Bjarne', 'Connor', 'Eike', 'Elias', 'Fin
 
 @app.route("/")
 def start():
-    return render_template("index.html", persons=persons)
+    if session:
+        return render_template("index.html", persons=persons, li=session["logged_in"], voted=session["voted"])
+    else:
+        return redirect("/session_config")
+    
+@app.route("/session_config")
+def config():
+    session["logged_in"] = False
+    session["voted"] = False
+
+    return redirect("/")
+
+@app.route("/session_clear")
+def clear():
+    session.clear()
+    return redirect("/")
 
 @app.route("/vote", methods=["POST"])
 def vote_handling():
@@ -30,6 +46,10 @@ def vote_handling():
         vote = Vote(option=name, count=1)
         db.session.add(vote)
     db.session.commit()
+
+    session["voted"] = True
+    session.modified = True
+
     return redirect("/results")
 
 @app.route("/results", methods=["GET"])
@@ -42,6 +62,10 @@ def results():
 def reset_votes():
     db.session.query(Vote).delete()
     db.session.commit()
+
+    session["voted"] = False
+    session.modified = True
+
     return redirect("/")
 
 if __name__ == "__main__":

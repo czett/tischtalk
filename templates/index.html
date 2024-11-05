@@ -2,13 +2,16 @@
 
 {% block form %}
 
-<form action="/vote" method="post" enctype="multipart/form-data">
+<form action="/vote" method="post" enctype="multipart/form-data" class="voting-form">
     <h2 class="question">Wer würde am ehesten den orble flimben?</h2>
+    {% if voted == True %}
+    <p class="voted-msg">Du hast schon abgestimmt!</p>
+    {% endif %}
 
     <div class="options">
         {% for person in persons %}
-            <input class="radio" type="radio" name="person" id="{{person}}" value="{{person}}">
-            <label for="{{person}}" class="option">{{person}}</label>
+            <input class="radio" type="radio" name="person" id="{{person}}" {% if voted == True %}disabled{% endif %} value="{{person}}" required>
+            <label for="{{person}}" class="option" onmousedown="clickName(this)">{{person}}</label>
         {% endfor %}
     </div>
 
@@ -17,5 +20,18 @@
         <a href="/results"><button type="button">ergebnisse</button></a>
     </div>
 </form>
+
+{% if voted == True %}
+
+<style>
+
+form.voting-form .options{
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+</style>
+
+{% endif %}
 
 {% endblock %}
