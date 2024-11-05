@@ -21,6 +21,12 @@ body, html{
     box-sizing: border-box;
     margin: 0;
     background-color: var(--bg);
+    overflow-x: hidden;
+    padding-bottom: 10vh;
+}
+
+::-webkit-scrollbar{
+    display: none;
 }
 
 a{
