@@ -53,6 +53,7 @@ h1.title{
 
 .question{
     font-size: 2.25rem;
+    text-align: center;
 }
 
 button{
@@ -115,6 +116,7 @@ button:hover{
     aspect-ratio: 1;
     width: 2vw;
     cursor: pointer;
+    visibility: hidden;
 }
 
 .profile .icon span{

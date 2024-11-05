@@ -3,7 +3,7 @@
 {% block form %}
 
 <form action="/vote" method="post" enctype="multipart/form-data" class="voting-form">
-    <h2 class="question">Wer würde am ehesten den orble flimben?</h2>
+    <h2 class="question">{{q}}</h2>
     {% if voted == True %}
     <p class="voted-msg">Du hast schon abgestimmt!</p>
     {% endif %}
