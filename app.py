@@ -97,10 +97,10 @@ def reset_votes():
 
     return redirect("/")
 
-@app.errorhandler(Exception)
-def handle_error(error):
-    # Error handling will be done, however procrastinated :3
-    return redirect("/")
+# @app.errorhandler(Exception)
+# def handle_error(error):
+#     # Error handling will be done, however procrastinated :3
+#     return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
