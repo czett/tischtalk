@@ -2,58 +2,54 @@ from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import random, os
-from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
-
+# Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "default_secret_key")  # Retrieve secret key from env
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres.ymjaliwvpuvhkevhguwd:xf4CKBawMd-q2Q*@aws-0-eu-central-1.pooler.supabase.com:6543/postgres"
+# Database configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+# Initialize global variables
 last_run_date = None
 current_question = None
 
+# Models
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     option = db.Column(db.String(50), nullable=False)
     count = db.Column(db.Integer, default=0)
 
+class Setting(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(50), unique=True, nullable=False)
+    value = db.Column(db.String(255), nullable=False)
+
+# Create tables in the database (if not already created)
 with app.app_context():
     db.create_all()
 
+# Helper functions
 def get_last_run_date():
-    return os.getenv("LAST_UPDATE_DATE")
+    setting = Setting.query.filter_by(key="LAST_UPDATE_DATE").first()
+    return setting.value if setting else None
 
 def set_last_run_date(date):
-    # Open .env and update the LAST_UPDATE_DATE entry
-    env_file_path = ".env"
-    found = False
-    lines = []
-    with open(env_file_path, "r") as f:
-        lines = f.readlines()
-
-    for i in range(len(lines)):
-        if lines[i].startswith("LAST_UPDATE_DATE="):
-            lines[i] = f"LAST_UPDATE_DATE={date}\n"
-            found = True
-            break
-
-    if not found:
-        lines.append(f"LAST_UPDATE_DATE={date}\n")
-
-    with open(env_file_path, "w") as f:
-        f.writelines(lines)
-
-    load_dotenv()  # Reload environment variables
+    setting = Setting.query.filter_by(key="LAST_UPDATE_DATE").first()
+    if setting:
+        setting.value = date
+    else:
+        setting = Setting(key="LAST_UPDATE_DATE", value=date)
+        db.session.add(setting)
+    db.session.commit()
 
 def check_new_day():
     global last_run_date
     current_date = datetime.now().date()
 
-    env_last_run_date = os.getenv("LAST_UPDATE_DATE")
+    env_last_run_date = get_last_run_date()  # Get from DB
     
     if last_run_date is None:
         if env_last_run_date:
@@ -63,7 +59,7 @@ def check_new_day():
 
     if current_date > last_run_date:
         last_run_date = current_date
-        set_last_run_date(current_date)
+        set_last_run_date(current_date)  # Save to DB
         return True
     return False
 
@@ -83,6 +79,7 @@ def new_question():
         else:
             current_question = "Keine Frage verfügbar."
 
+# Routes
 @app.route("/")
 def start():
     global current_question
@@ -146,5 +143,6 @@ def reset_votes():
 
     return redirect("/")
 
+# Run the app
 if __name__ == "__main__":
     app.run(debug=True)
