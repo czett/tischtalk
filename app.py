@@ -6,7 +6,8 @@ import random, os
 app = Flask(__name__)
 db = SQLAlchemy(app)
 app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL") + "?sslmode=require"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 last_run_date = None
