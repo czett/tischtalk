@@ -4,7 +4,7 @@ from datetime import datetime
 import random, os
 from dotenv import load_dotenv
 
-load_dotenv()  # Lädt die Variablen aus der .env Datei
+load_dotenv()  # .env file
 
 app = Flask(__name__)
 app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
@@ -24,33 +24,72 @@ class Vote(db.Model):
 with app.app_context():
     db.create_all()
 
+def get_last_run_date():
+    return os.getenv("LAST_UPDATE_DATE")
+
+def set_last_run_date(date):
+    with open(".env", "r") as f:
+        lines = f.readlines()
+
+    found = False
+    for i in range(len(lines)):
+        if lines[i].startswith("LAST_UPDATE_DATE="):
+            lines[i] = f"LAST_UPDATE_DATE={date}\n"
+            found = True
+            break
+
+    if not found:
+        lines.append(f"LAST_UPDATE_DATE={date}\n")
+
+    with open(".env", "w") as f:
+        f.writelines(lines)
+
+    load_dotenv()
+
 def check_new_day():
     global last_run_date
     current_date = datetime.now().date()
+
+    env_last_run_date = os.getenv("LAST_UPDATE_DATE")
     
-    if last_run_date is None or current_date > last_run_date:
+    if last_run_date is None:
+        if env_last_run_date:
+            last_run_date = datetime.strptime(env_last_run_date, "%Y-%m-%d").date()
+        else:
+            last_run_date = current_date
+
+    if current_date > last_run_date:
         last_run_date = current_date
+        set_last_run_date(current_date)
         return True
     return False
 
 def persons() -> list:
-    with open("static/persons.csv", "r") as file:
-        return [person for person in file.readline().split(",")]
+    ps = os.getenv("FRIENDS")
+    return [person for person in ps.split(",")]
     
 def new_question():
     global current_question
     with open("static/questions.csv", "r") as file:
-        questions = [q for q in file.readline().split(";")]
-        current_question = random.choice(questions)
+        questions = [q.strip() for q in file.read().split(";") if q.strip()]
+        print("Geladene Fragen:", questions)
+        if questions:
+            current_question = random.choice(questions)
+        else:
+            current_question = "Keine Frage verfügbar."
 
 @app.route("/")
 def start():
+    global current_question
     if session:
         if check_new_day():
             new_question()
+        if not current_question:
+            current_question = "Keine Frage verfügbar."
         return render_template("index.html", persons=persons(), li=session["logged_in"], voted=session["voted"], q=current_question)
     else:
         return redirect("/session_config")
+
     
 @app.route("/session_config")
 def config():
