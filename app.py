@@ -1,12 +1,13 @@
 from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import random
+import random, os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 db = SQLAlchemy(app)
 app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL") + "?sslmode=require"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 last_run_date = None
 current_question = None
