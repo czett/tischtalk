@@ -4,12 +4,17 @@ from datetime import datetime
 import random, os
 from dotenv import load_dotenv
 
-load_dotenv()  # .env file
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
-app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "default_secret_key")  # Retrieve secret key from env
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
+# Ensure database URI is loaded from the environment variables
+SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+if not SQLALCHEMY_DATABASE_URI:
+    raise RuntimeError("SQLALCHEMY_DATABASE_URI is not set in environment variables!")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -28,10 +33,13 @@ def get_last_run_date():
     return os.getenv("LAST_UPDATE_DATE")
 
 def set_last_run_date(date):
-    with open(".env", "r") as f:
+    # Open .env and update the LAST_UPDATE_DATE entry
+    env_file_path = ".env"
+    found = False
+    lines = []
+    with open(env_file_path, "r") as f:
         lines = f.readlines()
 
-    found = False
     for i in range(len(lines)):
         if lines[i].startswith("LAST_UPDATE_DATE="):
             lines[i] = f"LAST_UPDATE_DATE={date}\n"
@@ -41,10 +49,10 @@ def set_last_run_date(date):
     if not found:
         lines.append(f"LAST_UPDATE_DATE={date}\n")
 
-    with open(".env", "w") as f:
+    with open(env_file_path, "w") as f:
         f.writelines(lines)
 
-    load_dotenv()
+    load_dotenv()  # Reload environment variables
 
 def check_new_day():
     global last_run_date
@@ -56,7 +64,7 @@ def check_new_day():
         if env_last_run_date:
             last_run_date = datetime.strptime(env_last_run_date, "%Y-%m-%d").date()
         else:
-            last_run_date = current_date
+            last_run_date = current_date  # Set initial value to today's date
 
     if current_date > last_run_date:
         last_run_date = current_date
@@ -66,8 +74,10 @@ def check_new_day():
 
 def persons() -> list:
     ps = os.getenv("FRIENDS")
-    return [person for person in ps.split(",")]
-    
+    if ps:
+        return [person for person in ps.split(",")]
+    return []
+
 def new_question():
     global current_question
     with open("static/questions.csv", "r") as file:
@@ -86,19 +96,16 @@ def start():
             new_question()
         if not current_question:
             current_question = "Keine Frage verfügbar."
-        return render_template("index.html", persons=persons(), li=session["logged_in"], voted=session["voted"], q=current_question)
+        return render_template("index.html", persons=persons(), li=session.get("logged_in", False), voted=session.get("voted", False), q=current_question)
     else:
         return redirect("/session_config")
 
-    
 @app.route("/session_config")
 def config():
-    # more to come, just creating foundations
     session["logged_in"] = False
     session["name"] = ""
     session["profile_id"] = ""
     session["voted"] = False
-
     return redirect("/")
 
 @app.route("/session_clear")
@@ -132,7 +139,7 @@ def results():
 def reset_votes():
     global last_run_date
     global current_question
-    
+
     last_run_date = None
     current_question = None
 
@@ -143,11 +150,6 @@ def reset_votes():
     session.modified = True
 
     return redirect("/")
-
-# @app.errorhandler(Exception)
-# def handle_error(error):
-#     # Error handling will be done, however procrastinated :3
-#     return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
