@@ -14,7 +14,7 @@ SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 if not SQLALCHEMY_DATABASE_URI:
     raise RuntimeError("SQLALCHEMY_DATABASE_URI is not set in environment variables!")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres.ymjaliwvpuvhkevhguwd:xf4CKBawMd-q2Q*@aws-0-eu-central-1.pooler.supabase.com:6543/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
