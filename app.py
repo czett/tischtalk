@@ -2,13 +2,16 @@ from flask import Flask, render_template, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import random, os
+from dotenv import load_dotenv
+
+load_dotenv()  # Lädt die Variablen aus der .env Datei
 
 app = Flask(__name__)
-db = SQLAlchemy(app)
 app.secret_key = "gleezeborpglorpzyblopglorporbleflimb"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 last_run_date = None
 current_question = None
