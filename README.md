@@ -1,5 +1,7 @@
 ![Wo ist mein Icon?](https://github.com/czett/tischtalk/blob/main/static/banner.png)
 
+# Wichtig: Ändere die Namen deiner Freunde in der static/persons.csv!!!
+
 ## Übersicht
 
 TischTalk ist eine interaktive Webanwendung, die dazu dient, unter Freunden oder der Familie anregende und unterhaltsame Gespräche zu fördern. Die Anwendung wurde mit Flask entwickelt und auf Vercel gehostet. TischTalk ermöglicht es den Nutzern, an einem Abstimmungsspiel teilzunehmen, das auf amüsanten und zum Nachdenken anregenden Fragen basiert. Täglich wird eine Frage ausgewählt, die die Nutzer dazu ermutigt, über ihre bevorzugten Antworten aus einer Gruppe von Teilnehmern abzustimmen.
@@ -13,7 +15,7 @@ TischTalk ist eine interaktive Webanwendung, die dazu dient, unter Freunden oder
 
 ## Nutzung
 
-1. **Besuche die Anwendung**: Gehe zu [TischTalk](https://tischtalk.vercel.app).
+1. **Besuche die Anwendung**
 2. **Starte das Spiel**: Auf der Hauptseite kannst du mit der Abstimmung beginnen, indem du eine der vorgegebenen Fragen auswählst.
 3. **Abstimmen**: Wähle deinen Favoriten und sende deine Stimme ab.
 4. **Ergebnisse ansehen**: Schau dir die aktuellen Abstimmungsergebnisse an und entdecke, wer die meisten Stimmen erhalten hat.
